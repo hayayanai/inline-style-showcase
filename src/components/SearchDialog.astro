@@ -1,0 +1,422 @@
+---
+
+---
+
+<div class="search-trigger-wrapper">
+  <button
+    class="search-trigger"
+    id="searchTrigger"
+    type="button"
+    aria-label="Search effects"
+  >
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <span class="search-trigger-text">Search...</span>
+    <kbd class="search-shortcut"
+      ><span class="search-shortcut-key">⌘</span>K</kbd
+    >
+  </button>
+</div>
+
+<dialog class="search-dialog" id="searchDialog">
+  <div class="search-dialog-content">
+    <div class="search-input-wrapper">
+      <svg
+        class="search-icon"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="text"
+        class="search-input"
+        id="searchInput"
+        placeholder="Search effects..."
+        autocomplete="off"
+      />
+      <kbd class="search-esc">Esc</kbd>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</dialog>
+
+<script>
+  type SearchItem = {
+    title: string;
+    description: string;
+    category: string;
+    categoryLabel: string;
+    tags: string[];
+    href: string;
+  };
+
+  let searchIndex: SearchItem[] | null = null;
+  const baseUrl = import.meta.env.BASE_URL;
+
+  async function loadSearchIndex(): Promise<SearchItem[]> {
+    if (searchIndex) return searchIndex;
+    const res = await fetch(`${baseUrl}search-index.json`);
+    searchIndex = await res.json();
+    return searchIndex;
+  }
+
+  function highlight(text: string, query: string) {
+    if (!query) return escapeHtml(text);
+    const escaped = escapeHtml(text);
+    const escapedQuery = escapeHtml(query);
+    const regex = new RegExp(
+      `(${escapedQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+      "gi",
+    );
+    return escaped.replace(regex, "<mark>$1</mark>");
+  }
+
+  function escapeHtml(str: string) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function setupSearchDialog() {
+    const dialog = document.getElementById("searchDialog") as HTMLDialogElement;
+    const trigger = document.getElementById("searchTrigger");
+    const input = document.getElementById("searchInput") as HTMLInputElement;
+    const resultsContainer = document.getElementById("searchResults")!;
+    let selectedIndex = -1;
+
+    async function openSearch() {
+      dialog.showModal();
+      input.value = "";
+      input.focus();
+      selectedIndex = -1;
+      const index = await loadSearchIndex();
+      renderResults("", index);
+    }
+
+    function closeSearch() {
+      dialog.close();
+    }
+
+    trigger?.addEventListener("click", openSearch);
+
+    // Cmd+K / Ctrl+K shortcut
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (dialog.open) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+    });
+
+    // Close on backdrop click
+    dialog?.addEventListener("click", (e) => {
+      if (e.target === dialog) {
+        closeSearch();
+      }
+    });
+
+    function renderResults(query: string, index: SearchItem[]) {
+      const q = query.toLowerCase().trim();
+      let filtered = index;
+
+      if (q) {
+        filtered = index.filter((item) => {
+          return (
+            item.title.toLowerCase().includes(q) ||
+            item.description.toLowerCase().includes(q) ||
+            item.categoryLabel.toLowerCase().includes(q) ||
+            item.tags.some((tag: string) => tag.toLowerCase().includes(q))
+          );
+        });
+      }
+
+      selectedIndex = filtered.length > 0 ? 0 : -1;
+
+      if (filtered.length === 0 && q) {
+        resultsContainer.innerHTML =
+          '<div class="search-empty">No results found.</div>';
+        return;
+      }
+
+      resultsContainer.innerHTML = filtered
+        .map(
+          (item, i) => `
+        <a href="${item.href}" class="search-result-item${i === 0 ? " selected" : ""}" data-index="${i}">
+          <div class="search-result-main">
+            <span class="search-result-title">${highlight(item.title, q)}</span>
+            <span class="search-result-desc">${highlight(item.description, q)}</span>
+          </div>
+          <span class="search-result-category">${item.categoryLabel}</span>
+        </a>`,
+        )
+        .join("");
+    }
+
+    function updateSelection() {
+      const items = resultsContainer.querySelectorAll(".search-result-item");
+      items.forEach((item, i) => {
+        item.classList.toggle("selected", i === selectedIndex);
+      });
+      items[selectedIndex]?.scrollIntoView({ block: "nearest" });
+    }
+
+    input?.addEventListener("input", async (e) => {
+      const index = await loadSearchIndex();
+      renderResults((e.target as HTMLInputElement).value, index);
+    });
+
+    input?.addEventListener("keydown", (e) => {
+      const items = resultsContainer.querySelectorAll(".search-result-item");
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+        updateSelection();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, 0);
+        updateSelection();
+      } else if (e.key === "Enter" && selectedIndex >= 0) {
+        e.preventDefault();
+        const selected = items[selectedIndex];
+        if (selected) {
+          window.location.href = selected.getAttribute("href")!;
+        }
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupSearchDialog);
+</script>
+
+<style>
+  .search-trigger-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    background: var(--overlay-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+    min-width: 200px;
+  }
+
+  .search-trigger:hover {
+    background: var(--overlay-light);
+    border-color: var(--overlay-strong);
+    color: var(--text-primary);
+  }
+
+  .search-trigger-text {
+    flex: 1;
+    text-align: left;
+  }
+
+  .search-shortcut {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    background: var(--overlay-subtle);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--overlay-light);
+    font-family: inherit;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    .search-trigger {
+      min-width: auto;
+      padding: 0.4rem 0.5rem;
+    }
+
+    .search-trigger-text,
+    .search-shortcut {
+      display: none;
+    }
+  }
+
+  /* Dialog */
+  .search-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .search-dialog::backdrop {
+    background: var(--backdrop);
+    backdrop-filter: blur(4px);
+  }
+
+  .search-dialog-content {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 560px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--overlay-light);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px var(--shadow);
+  }
+
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--overlay-subtle);
+    gap: 0.75rem;
+  }
+
+  .search-icon {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+    font-family: inherit;
+  }
+
+  .search-input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  .search-esc {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    background: var(--overlay-subtle);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--overlay-light);
+    font-family: inherit;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .search-results {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 0.5rem;
+  }
+
+  :global(.search-result-item) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    gap: 1rem;
+    transition: background 0.1s ease;
+  }
+
+  :global(.search-result-item:hover),
+  :global(.search-result-item.selected) {
+    background: var(--accent-overlay);
+    color: var(--text-primary);
+  }
+
+  :global(.search-result-main) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  :global(.search-result-title) {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  :global(.search-result-desc) {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(.search-result-category) {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  :global(.search-empty) {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  :global(.search-result-item mark) {
+    background: var(--accent-border);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  @media (max-width: 768px) {
+    .search-dialog-content {
+      top: 10%;
+      width: 95%;
+    }
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+export const meta = {
+  title: "Filled Outline",
+  description: "Filled text with outline effect",
+  category: "text" as const,
+  tags: ["outline", "stroke", "filled"],
+};
+
+export const code = `<span style="color:#ff6b6b;-webkit-text-stroke:1px #fff;font-size:2.5em;font-weight:bold;letter-spacing:0.02em">Filled Outline</span>`;
+
+export const props = [
+  {
+    name: "fillColor",
+    type: "color" as const,
+    default: "#ff6b6b",
+    label: "Fill Color",
+    description: "Text fill color",
+  },
+  {
+    name: "strokeColor",
+    type: "color" as const,
+    default: "#ffffff",
+    label: "Outline Color",
+    description: "Outline color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 2.5,
+    min: 1,
+    max: 5,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="color:{{fillColor}};-webkit-text-stroke:1px {{strokeColor}};font-size:{{fontSize}}{{fontSizeUnit}};font-weight:bold;letter-spacing:0.02em">Filled Outline</span>`;
+---
+
+<Fragment set:html={code} />

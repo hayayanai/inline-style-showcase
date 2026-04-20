@@ -1,0 +1,12 @@
+---
+export const meta = {
+  title: "Sliced Shadow",
+  description: "Chunky text shadow layers that create a sliced poster style",
+  category: "text" as const,
+  tags: ["shadow", "poster", "bold"],
+};
+
+export const code = `<span style="font-size:2.6em;font-weight:900;letter-spacing:.05em;color:#f8fafc;text-shadow:2px 2px 0 #0f172a,4px 4px 0 #334155,6px 6px 0 #475569,8px 8px 16px rgba(15,23,42,.6)">SLICED</span>`;
+---
+
+<Fragment set:html={code} />

@@ -1,0 +1,47 @@
+---
+export const meta = {
+  title: "Retro Chrome",
+  description: "Retro chrome metallic text effect",
+  category: "text" as const,
+  tags: ["chrome", "metallic", "retro"],
+};
+
+export const code = `<span style="background:linear-gradient(180deg,#c0c0c0 0%,#ffffff 25%,#808080 50%,#ffffff 75%,#c0c0c0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:2.5em;font-weight:bold;letter-spacing:0.05em;text-shadow:none">Chrome</span>`;
+
+export const props = [
+  {
+    name: "baseColor",
+    type: "color" as const,
+    default: "#c0c0c0",
+    label: "Base Color",
+    description: "Metallic base color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 2.5,
+    min: 1,
+    max: 5,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="background:linear-gradient(180deg,{{baseColor}} 0%,#ffffff 25%,#808080 50%,#ffffff 75%,{{baseColor}} 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:{{fontSize}}{{fontSizeUnit}};font-weight:bold;letter-spacing:0.05em;text-shadow:none">Chrome</span>`;
+---
+
+<Fragment set:html={code} />

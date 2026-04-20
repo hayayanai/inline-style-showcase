@@ -1,0 +1,61 @@
+---
+export const meta = {
+  title: "Gradient Sunset",
+  description: "Sunset-like gradient text effect",
+  category: "text" as const,
+  tags: ["gradient", "sunset", "warm"],
+};
+
+export const code = `<span style="background:linear-gradient(90deg,#ff512f,#f09819,#dd2476);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:bold;font-size:2em">Sunset Text</span>`;
+
+export const props = [
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#ff512f",
+    label: "Color 1",
+    description: "Gradient start color",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#f09819",
+    label: "Color 2",
+    description: "Gradient middle color",
+  },
+  {
+    name: "color3",
+    type: "color" as const,
+    default: "#dd2476",
+    label: "Color 3",
+    description: "Gradient end color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 2,
+    min: 1,
+    max: 5,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="background:linear-gradient(90deg,{{color1}},{{color2}},{{color3}});-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:bold;font-size:{{fontSize}}{{fontSizeUnit}}">Sunset Text</span>`;
+---
+
+<Fragment set:html={code} />

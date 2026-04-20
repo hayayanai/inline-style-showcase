@@ -1,0 +1,34 @@
+---
+import { Code } from "astro:components";
+
+interface Props {
+  code: string;
+  lang?: string;
+}
+
+const { code, lang = "html" } = Astro.props;
+---
+
+<div class="code-block">
+  <Code code={code} lang={lang} theme="github-dark" />
+</div>
+
+<style>
+  .code-block {
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+
+  .code-block :global(pre) {
+    margin: 0;
+    background: transparent !important;
+  }
+
+  .code-block :global(code) {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+</style>

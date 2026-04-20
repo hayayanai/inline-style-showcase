@@ -1,0 +1,418 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import {
+  getAllEffects,
+  getCategoryLabel,
+  getFirstEffect,
+} from "../lib/effects";
+
+const allEffects = getAllEffects();
+const base = import.meta.env.BASE_URL;
+const firstTextEffect = getFirstEffect(allEffects, "text");
+const browseEffectsHref = firstTextEffect
+  ? `${base}text/${firstTextEffect.slug}`
+  : `${base}text`;
+
+// Pick featured effects (one from each category)
+const featured: {
+  slug: string;
+  category: string;
+  meta: any;
+  code: string;
+  Component: any;
+}[] = [];
+for (const [category, effects] of allEffects) {
+  // Take first 2 from each category
+  featured.push(...effects.slice(0, 2));
+}
+
+const totalCount = [...allEffects.values()].reduce(
+  (sum, arr) => sum + arr.length,
+  0,
+);
+const categoryCount = allEffects.size;
+---
+
+<MainLayout
+  title="Home"
+  description="Copy-paste inline CSS effects for Markdown HTML. No <style> or <script> needed."
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">Open Source</div>
+    <h1 class="hero-title">
+      Inline CSS Effects<br />
+      <span class="hero-accent">for Markdown HTML</span>
+    </h1>
+    <p class="hero-description">
+      A collection of copy-paste inline CSS effects.<br />
+      Works with just <code>style=""</code> &mdash; no <code>&lt;style&gt;</code
+      > or <code>&lt;script&gt;</code> needed.
+    </p>
+    <div class="hero-actions">
+      <a href={`${base}get-started`} class="btn btn-primary">Get Started</a>
+      <a href={browseEffectsHref} class="btn btn-outline">Browse Effects</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-number">{totalCount}</span>
+        <span class="stat-label">Effects</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">{categoryCount}</span>
+        <span class="stat-label">Categories</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">0</span>
+        <span class="stat-label">Dependencies</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#128203;</div>
+        <h2>Copy & Paste</h2>
+        <p>
+          Just copy an effect and paste it directly into your Markdown HTML. No
+          setup required.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#9889;</div>
+        <h2>Zero Dependencies</h2>
+        <p>
+          No <code>&lt;style&gt;</code> tags or <code>&lt;script&gt;</code> needed.
+          Everything works with just the <code>style=""</code> attribute.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#127912;</div>
+        <h2>Customizable</h2>
+        <p>
+          Every effect uses inline styles, so you can freely customize by simply
+          changing the values.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preview Grid -->
+  <section class="preview-section">
+    <h2 class="section-heading">Effects Preview</h2>
+    <p class="section-subheading">
+      Hand-picked effects from each category. Click to view details.
+    </p>
+    <div class="preview-grid">
+      {
+        featured.map((effect) => (
+          <a
+            href={`${base}${effect.category}/${effect.slug}`}
+            class="preview-card"
+          >
+            <div class="preview-card-demo">
+              <effect.Component />
+            </div>
+            <div class="preview-card-footer">
+              <span class="preview-card-category">
+                {getCategoryLabel(effect.category)}
+              </span>
+              <span class="preview-card-title">{effect.meta.title}</span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+    <div class="preview-cta">
+      <a href={`${base}get-started`} class="btn btn-outline"
+        >View All Effects &rarr;</a
+      >
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 5rem 1rem 4rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
+    border: 1px solid var(--accent-border);
+    border-radius: 9999px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin: 0 0 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-accent {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 2rem;
+  }
+
+  .hero-description code {
+    background: var(--overlay-subtle);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #818cf8, var(--accent));
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    color: #fff;
+  }
+
+  .btn-outline {
+    border: 1px solid var(--overlay-medium);
+    color: var(--text-primary);
+    background: transparent;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--overlay-strong);
+    background: var(--overlay-subtle);
+    color: var(--text-primary);
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  /* Features */
+  .features {
+    padding: 3rem 1rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    background: var(--overlay-subtle);
+    border: 1px solid var(--overlay-subtle);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .feature-card:hover {
+    border-color: var(--accent-overlay);
+  }
+
+  .feature-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+  }
+
+  .feature-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .feature-card code {
+    background: var(--overlay-subtle);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+    color: var(--text-primary);
+  }
+
+  /* Preview Section */
+  .preview-section {
+    padding: 3rem 1rem 5rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-heading {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+  }
+
+  .section-subheading {
+    text-align: center;
+    color: var(--text-secondary);
+    margin: 0 0 2rem;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .preview-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+    border: 1px solid var(--overlay-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .preview-card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 0 24px var(--accent-overlay);
+  }
+
+  .preview-card-demo {
+    min-height: 120px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--preview-bg);
+  }
+
+  .preview-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .preview-card-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .preview-card-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .preview-cta {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 3rem 1rem 2.5rem;
+    }
+
+    .hero-title {
+      font-size: 2.2rem;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-stats {
+      gap: 2rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .preview-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

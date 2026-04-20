@@ -1,0 +1,109 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import TabbedPreview from "../../components/TabbedPreview.astro";
+import CustomizeSection from "../../components/CustomizeSection.astro";
+import PropsTable from "../../components/PropsTable.astro";
+import { getAllEffects, getCategories } from "../../lib/effects";
+
+export function getStaticPaths() {
+  const allEffects = getAllEffects();
+  const paths: { params: { category: string; slug: string } }[] = [];
+
+  for (const [category, effects] of allEffects) {
+    for (const effect of effects) {
+      paths.push({ params: { category, slug: effect.slug } });
+    }
+  }
+
+  return paths;
+}
+
+const { category, slug } = Astro.params;
+const allEffects = getAllEffects();
+const effects = allEffects.get(category!) ?? [];
+const effect = effects.find((e) => e.slug === slug);
+
+if (!effect) {
+  return Astro.redirect("/");
+}
+
+const { meta, code, props, codeTemplate, Component } = effect;
+const hasCustomize = props && props.length > 0 && codeTemplate;
+---
+
+<MainLayout title={meta.title} showSidebar>
+  <Sidebar currentCategory={category!} currentSlug={slug!} slot="sidebar" />
+  <div class="effect-page">
+    <h1 class="effect-title">{meta.title}</h1>
+
+    <TabbedPreview code={code}>
+      <Component />
+    </TabbedPreview>
+
+    {
+      hasCustomize && (
+        <CustomizeSection props={props} codeTemplate={codeTemplate} />
+      )
+    }
+
+    {hasCustomize && <PropsTable props={props} />}
+
+    <div class="effect-info">
+      <p class="effect-description">{meta.description}</p>
+      <div class="effect-tags">
+        {meta.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .effect-page {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .effect-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 1.5rem 0;
+  }
+
+  .effect-info {
+    margin-top: 1.5rem;
+  }
+
+  .effect-description {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0 0 1rem 0;
+  }
+
+  .effect-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--accent-overlay);
+    color: var(--accent);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .effect-page {
+      padding: 1.5rem 1rem;
+    }
+
+    .effect-title {
+      font-size: 1.5rem;
+    }
+  }
+</style>

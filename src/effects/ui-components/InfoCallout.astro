@@ -1,0 +1,13 @@
+---
+export const meta = {
+  title: "Info Callout",
+  description:
+    "Compact informational callout with icon badge and soft gradient",
+  category: "ui-components" as const,
+  tags: ["callout", "info", "banner"],
+};
+
+export const code = `<div style="max-width:360px;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid rgba(56,189,248,.4);border-radius:12px;background:linear-gradient(135deg,rgba(14,116,144,.28),rgba(30,58,138,.25));color:#e0f2fe"><span style="display:inline-flex;width:24px;height:24px;border-radius:9999px;background:#0ea5e9;color:#082f49;align-items:center;justify-content:center;font-size:0.9em;font-weight:700;flex:0 0 24px">i</span><div><div style="font-size:0.95em;font-weight:700;line-height:1.2">Inline tip</div><div style="font-size:0.85em;line-height:1.4;opacity:.92;margin-top:2px">Use one self-contained HTML block to share styles in Markdown-friendly environments.</div></div></div>`;
+---
+
+<Fragment set:html={code} />

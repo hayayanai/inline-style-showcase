@@ -1,0 +1,54 @@
+---
+export const meta = {
+  title: "Comic Text",
+  description: "Bold comic book pop-style text",
+  category: "text" as const,
+  tags: ["comic", "pop", "bold", "stroke"],
+};
+
+export const code = `<span style="font-size:3em;font-weight:900;color:#ffdd00;-webkit-text-stroke:2px #000;text-shadow:4px 4px 0 #000,5px 5px 0 #c00;letter-spacing:0.05em;font-style:italic">POW!</span>`;
+
+export const props = [
+  {
+    name: "fillColor",
+    type: "color" as const,
+    default: "#ffdd00",
+    label: "Fill Color",
+    description: "Text fill color",
+  },
+  {
+    name: "shadowColor",
+    type: "color" as const,
+    default: "#c00",
+    label: "Shadow Color",
+    description: "Drop shadow color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 3,
+    min: 1.5,
+    max: 6,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="font-size:{{fontSize}}{{fontSizeUnit}};font-weight:900;color:{{fillColor}};-webkit-text-stroke:2px #000;text-shadow:4px 4px 0 #000,5px 5px 0 {{shadowColor}};letter-spacing:0.05em;font-style:italic">POW!</span>`;
+---
+
+<Fragment set:html={code} />

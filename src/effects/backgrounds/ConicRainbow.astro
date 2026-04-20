@@ -1,0 +1,35 @@
+---
+export const meta = {
+  title: "Conic Rainbow",
+  description: "Conic rainbow gradient background",
+  category: "backgrounds" as const,
+  tags: ["gradient", "rainbow", "conic"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background:conic-gradient(from 0deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#9400d3,#ff0000)"></div>`;
+
+export const props = [
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 12,
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+  {
+    name: "startColor",
+    type: "color" as const,
+    default: "#ff0000",
+    label: "Start Color",
+    description: "Conic gradient start color",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:{{borderRadius}}px;background:conic-gradient(from 0deg,{{startColor}},#ff7f00,#ffff00,#00ff00,#0000ff,#9400d3,{{startColor}})"></div>`;
+---
+
+<Fragment set:html={code} />

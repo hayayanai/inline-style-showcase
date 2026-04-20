@@ -1,0 +1,147 @@
+---
+import type { PropDefinition } from "../lib/effects";
+
+interface Props {
+  props: PropDefinition[];
+}
+
+const { props } = Astro.props;
+
+const orderedProps = [...props].sort((a, b) => {
+  if (a.type === "text" && a.name === "text") return -1;
+  if (b.type === "text" && b.name === "text") return 1;
+  return 0;
+});
+
+function formatDefault(prop: PropDefinition): string {
+  if (prop.unit) return `${prop.default}${prop.unit}`;
+  return String(prop.default);
+}
+
+function formatType(prop: PropDefinition): string {
+  if (prop.type === "slider" && prop.unit) return `slider (${prop.unit})`;
+  if (prop.type === "select") return "select";
+  return prop.type;
+}
+---
+
+<div class="props-section">
+  <h3 class="props-heading">Props</h3>
+  <div class="table-wrapper">
+    <table class="props-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          orderedProps.map((prop) => (
+            <tr>
+              <td>
+                <code>{prop.name}</code>
+              </td>
+              <td>
+                <span class="type-badge">{formatType(prop)}</span>
+              </td>
+              <td>
+                {prop.type === "color" ? (
+                  <span class="color-default">
+                    <span
+                      class="color-swatch"
+                      style={`background:${prop.default}`}
+                    />
+                    <code>{prop.default}</code>
+                  </span>
+                ) : (
+                  <code>{formatDefault(prop)}</code>
+                )}
+              </td>
+              <td>{prop.description}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .props-section {
+    margin-top: 2rem;
+  }
+
+  .props-heading {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--overlay-light);
+    border-radius: 12px;
+  }
+
+  .props-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-secondary);
+    font-size: 0.9rem;
+  }
+
+  .props-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-bottom: 1px solid var(--overlay-light);
+    white-space: nowrap;
+  }
+
+  .props-table td {
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--overlay-subtle);
+  }
+
+  .props-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .props-table code {
+    background: var(--overlay-subtle);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: var(--accent);
+  }
+
+  .type-badge {
+    display: inline-block;
+    padding: 0.15em 0.5em;
+    background: var(--accent-overlay);
+    color: var(--accent);
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 500;
+  }
+
+  .color-default {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .color-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid var(--overlay-strong);
+  }
+</style>

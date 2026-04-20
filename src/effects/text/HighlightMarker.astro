@@ -1,0 +1,47 @@
+---
+export const meta = {
+  title: "Highlight Marker",
+  description: "Text with marker highlighter effect",
+  category: "text" as const,
+  tags: ["highlight", "marker", "underline"],
+};
+
+export const code = `<span style="font-size:1.5em;font-weight:600;background:linear-gradient(180deg,transparent 60%,#fde68a 60%);display:inline;padding:0 4px">Highlighted Text</span>`;
+
+export const props = [
+  {
+    name: "highlightColor",
+    type: "color" as const,
+    default: "#fde68a",
+    label: "Highlight Color",
+    description: "Marker color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 1.5,
+    min: 1,
+    max: 3,
+    step: 0.25,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="font-size:{{fontSize}}{{fontSizeUnit}};font-weight:600;background:linear-gradient(180deg,transparent 60%,{{highlightColor}} 60%);display:inline;padding:0 4px">Highlighted Text</span>`;
+---
+
+<Fragment set:html={code} />

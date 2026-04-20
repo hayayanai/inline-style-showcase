@@ -1,0 +1,54 @@
+---
+export const meta = {
+  title: "Fire Text",
+  description: "Flame-like text effect",
+  category: "text" as const,
+  tags: ["fire", "shadow", "hot"],
+};
+
+export const code = `<span style="color:#fff;text-shadow:0 0 4px #fff,0 -5px 4px #ff3,0 -9px 6px #fd3,0 -13px 8px #f80,0 -18px 11px #f20;font-size:2em;font-weight:bold">Fire Text</span>`;
+
+export const props = [
+  {
+    name: "textColor",
+    type: "color" as const,
+    default: "#ffffff",
+    label: "Text Color",
+    description: "Text color",
+  },
+  {
+    name: "flameColor",
+    type: "color" as const,
+    default: "#f20",
+    label: "Flame Color",
+    description: "Outer flame color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 2,
+    min: 1,
+    max: 5,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="color:{{textColor}};text-shadow:0 0 4px #fff,0 -5px 4px #ff3,0 -9px 6px #fd3,0 -13px 8px #f80,0 -18px 11px {{flameColor}};font-size:{{fontSize}}{{fontSizeUnit}};font-weight:bold">Fire Text</span>`;
+---
+
+<Fragment set:html={code} />

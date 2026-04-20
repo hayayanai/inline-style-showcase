@@ -1,0 +1,38 @@
+---
+export const meta = {
+  title: "Alert Error",
+  description: "Alert box (Error)",
+  category: "ui-components" as const,
+  tags: ["alert", "error", "notification"],
+};
+
+export const code = `<div style="background:#f8d7da;border:1px solid #f5c6cb;border-left:4px solid #dc3545;border-radius:8px;padding:16px;color:#721c24;max-width:400px"><strong style="display:block;margin-bottom:4px">Error!</strong><span style="font-size:0.9em">Something went wrong. Please try again.</span></div>`;
+
+export const props = [
+  {
+    name: "accentColor",
+    type: "color" as const,
+    default: "#dc3545",
+    label: "Accent Color",
+    description: "Left border color",
+  },
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#f8d7da",
+    label: "Background",
+    description: "Alert background color",
+  },
+  {
+    name: "textColor",
+    type: "color" as const,
+    default: "#721c24",
+    label: "Text Color",
+    description: "Text color",
+  },
+];
+
+export const codeTemplate = `<div style="background:{{bgColor}};border:1px solid #f5c6cb;border-left:4px solid {{accentColor}};border-radius:8px;padding:16px;color:{{textColor}};max-width:400px"><strong style="display:block;margin-bottom:4px">Error!</strong><span style="font-size:0.9em">Something went wrong. Please try again.</span></div>`;
+---
+
+<Fragment set:html={code} />

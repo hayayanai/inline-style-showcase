@@ -1,0 +1,54 @@
+---
+export const meta = {
+  title: "Gradient Rainbow",
+  description: "Rainbow gradient text effect",
+  category: "text" as const,
+  tags: ["gradient", "rainbow", "colorful"],
+};
+
+export const code = `<span style="background:linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#9400d3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:bold;font-size:2em">Rainbow Text</span>`;
+
+export const props = [
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 2,
+    min: 1,
+    max: 5,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#ff0000",
+    label: "Start Color",
+    description: "Gradient start color",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#9400d3",
+    label: "End Color",
+    description: "Gradient end color",
+  },
+];
+
+export const codeTemplate = `<span style="background:linear-gradient(90deg,{{color1}},#ff7f00,#ffff00,#00ff00,#0000ff,{{color2}});-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:bold;font-size:{{fontSize}}{{fontSizeUnit}}">Rainbow Text</span>`;
+---
+
+<Fragment set:html={code} />

@@ -1,0 +1,45 @@
+---
+export const meta = {
+  title: "Ocean Gradient",
+  description: "Ocean gradient background",
+  category: "backgrounds" as const,
+  tags: ["gradient", "cool"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background:linear-gradient(180deg,#001233 0%,#023e8a 30%,#0077b6 60%,#00b4d8 100%)"></div>`;
+
+export const props = [
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#001233",
+    label: "Color 1 (Top)",
+    description: "Gradient top color",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#023e8a",
+    label: "Color 2",
+    description: "Gradient upper-middle color",
+  },
+  {
+    name: "color3",
+    type: "color" as const,
+    default: "#0077b6",
+    label: "Color 3",
+    description: "Gradient lower-middle color",
+  },
+  {
+    name: "color4",
+    type: "color" as const,
+    default: "#00b4d8",
+    label: "Color 4 (Bottom)",
+    description: "Gradient bottom color",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:12px;background:linear-gradient(180deg,{{color1}} 0%,{{color2}} 30%,{{color3}} 60%,{{color4}} 100%)"></div>`;
+---
+
+<Fragment set:html={code} />

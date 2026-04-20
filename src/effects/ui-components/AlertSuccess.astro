@@ -1,0 +1,38 @@
+---
+export const meta = {
+  title: "Alert Success",
+  description: "Alert box (Success)",
+  category: "ui-components" as const,
+  tags: ["alert", "success", "notification"],
+};
+
+export const code = `<div style="background:#d4edda;border:1px solid #c3e6cb;border-left:4px solid #28a745;border-radius:8px;padding:16px;color:#155724;max-width:400px"><strong style="display:block;margin-bottom:4px">Success!</strong><span style="font-size:0.9em">Operation completed successfully.</span></div>`;
+
+export const props = [
+  {
+    name: "accentColor",
+    type: "color" as const,
+    default: "#28a745",
+    label: "Accent Color",
+    description: "Left border color",
+  },
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#d4edda",
+    label: "Background",
+    description: "Alert background color",
+  },
+  {
+    name: "textColor",
+    type: "color" as const,
+    default: "#155724",
+    label: "Text Color",
+    description: "Text color",
+  },
+];
+
+export const codeTemplate = `<div style="background:{{bgColor}};border:1px solid #c3e6cb;border-left:4px solid {{accentColor}};border-radius:8px;padding:16px;color:{{textColor}};max-width:400px"><strong style="display:block;margin-bottom:4px">Success!</strong><span style="font-size:0.9em">Operation completed successfully.</span></div>`;
+---
+
+<Fragment set:html={code} />

@@ -1,0 +1,35 @@
+---
+export const meta = {
+  title: "Tooltip",
+  description: "Tooltip with arrow pointer",
+  category: "ui-components" as const,
+  tags: ["tooltip", "popup", "arrow"],
+};
+
+export const code = `<div style="position:relative;display:inline-block"><div style="background:#1e293b;color:#fff;padding:8px 16px;border-radius:8px;font-size:0.85em;box-shadow:0 4px 12px rgba(0,0,0,0.3);position:relative">This is a tooltip<div style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #1e293b"></div></div></div>`;
+
+export const props = [
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#1e293b",
+    label: "Background",
+    description: "Tooltip background color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 8,
+    min: 0,
+    max: 16,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<div style="position:relative;display:inline-block"><div style="background:{{bgColor}};color:#fff;padding:8px 16px;border-radius:{{borderRadius}}px;font-size:0.85em;box-shadow:0 4px 12px rgba(0,0,0,0.3);position:relative">This is a tooltip<div style="position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid {{bgColor}}"></div></div></div>`;
+---
+
+<Fragment set:html={code} />

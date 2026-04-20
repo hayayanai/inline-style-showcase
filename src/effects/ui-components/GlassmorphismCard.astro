@@ -1,0 +1,50 @@
+---
+export const meta = {
+  title: "Glassmorphism Card",
+  description: "Frosted glass card",
+  category: "ui-components" as const,
+  tags: ["glass", "card", "blur"],
+};
+
+export const code = `<div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:24px;color:#fff;max-width:320px"><h3 style="margin:0 0 8px;font-size:1.2em">Glass Card</h3><p style="margin:0;opacity:0.8;font-size:0.9em">This card has a frosted glass effect using backdrop-filter.</p></div>`;
+
+export const props = [
+  {
+    name: "blurAmount",
+    type: "slider" as const,
+    default: 10,
+    min: 2,
+    max: 30,
+    step: 1,
+    unit: "px",
+    label: "Blur Amount",
+    description: "Background blur amount",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 16,
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+  {
+    name: "padding",
+    type: "slider" as const,
+    default: 24,
+    min: 12,
+    max: 48,
+    step: 4,
+    unit: "px",
+    label: "Padding",
+    description: "Inner spacing",
+  },
+];
+
+export const codeTemplate = `<div style="background:rgba(255,255,255,0.1);backdrop-filter:blur({{blurAmount}}px);-webkit-backdrop-filter:blur({{blurAmount}}px);border:1px solid rgba(255,255,255,0.2);border-radius:{{borderRadius}}px;padding:{{padding}}px;color:#fff;max-width:320px"><h3 style="margin:0 0 8px;font-size:1.2em">Glass Card</h3><p style="margin:0;opacity:0.8;font-size:0.9em">This card has a frosted glass effect using backdrop-filter.</p></div>`;
+---
+
+<Fragment set:html={code} />

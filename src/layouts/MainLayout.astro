@@ -1,0 +1,346 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+import SearchDialog from "../components/SearchDialog.astro";
+import { getAllEffects, getFirstEffect } from "../lib/effects";
+
+const base = import.meta.env.BASE_URL;
+const allEffects = getAllEffects();
+
+const getCategoryLink = (category: string) => {
+  const first = getFirstEffect(allEffects, category);
+  return first ? `${base}${category}/${first.slug}` : `${base}${category}`;
+};
+
+interface Props {
+  title: string;
+  description?: string;
+  showSidebar?: boolean;
+}
+
+const {
+  title,
+  description = "A showcase of inline CSS styling effects and techniques",
+  showSidebar = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title} | inline-style-showcase</title>
+    <ClientRouter />
+    <script is:inline>
+      function applyTheme() {
+        const stored = localStorage.getItem("theme");
+        if (stored) {
+          document.documentElement.dataset.theme = stored;
+        } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+          document.documentElement.dataset.theme = "light";
+        }
+      }
+      applyTheme();
+      document.addEventListener("astro:after-swap", applyTheme);
+    </script>
+    <style>
+      /* Header Styles */
+      header {
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+        background: var(--header-bg);
+        will-change: transform;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-left: auto;
+      }
+
+      .site-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0;
+      }
+
+      .site-title a {
+        color: var(--accent);
+      }
+
+      .site-title a:hover {
+        color: var(--accent-hover);
+      }
+
+      nav {
+        display: none;
+      }
+
+      /* Theme Toggle */
+      .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        width: 2.1rem;
+        height: 2.1rem;
+        padding: 0;
+        border-radius: 6px;
+        line-height: 1;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease;
+      }
+
+      .theme-toggle .icon-moon,
+      .theme-toggle .icon-sun {
+        width: 1em;
+        height: 1em;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .theme-toggle:hover {
+        background: var(--overlay-light);
+        border-color: var(--accent);
+      }
+
+      .theme-toggle .icon-sun {
+        display: none;
+      }
+
+      [data-theme="light"] .theme-toggle .icon-moon {
+        display: none;
+      }
+
+      [data-theme="light"] .theme-toggle .icon-sun {
+        display: inline;
+      }
+
+      /* Mobile Menu Toggle */
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .site-title {
+          font-size: 1.2rem;
+        }
+
+        .header-actions {
+          gap: 0.5rem;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        nav {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: var(--bg-secondary);
+          border-bottom: 1px solid var(--border-color);
+          flex-direction: column;
+          gap: 0;
+          padding: 1rem 0;
+          display: none;
+        }
+
+        nav.active {
+          display: flex;
+        }
+
+        nav a {
+          color: var(--text-secondary);
+          font-weight: 500;
+          transition: color 0.2s ease;
+          padding: 1rem 2rem;
+          width: 100%;
+          text-align: left;
+        }
+
+        nav a:hover {
+          color: var(--text-primary);
+        }
+
+        nav a::after {
+          display: none;
+        }
+
+        .header-content {
+          flex-wrap: nowrap;
+        }
+
+        .has-sidebar nav {
+          display: none;
+        }
+      }
+
+      /* Page body layout */
+      .page-body {
+        display: flex;
+        flex: 1;
+        min-height: calc(100vh - 57px);
+      }
+
+      .page-body.no-sidebar main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        width: 100%;
+      }
+
+      .page-body.with-sidebar main {
+        flex: 1;
+        min-width: 0;
+        overflow-y: auto;
+      }
+
+      @media (max-width: 768px) {
+        .page-body.no-sidebar main {
+          padding: 2rem 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class:list={["header-content", { "has-sidebar": showSidebar }]}>
+          <p class="site-title">
+            <a href={base}>inline-style-showcase</a>
+          </p>
+          <div class="header-actions">
+            <SearchDialog />
+            <button
+              class="theme-toggle"
+              aria-label="Toggle theme"
+              id="themeToggle"
+            >
+              <span class="icon-moon">&#9790;</span>
+              <span class="icon-sun">&#9728;</span>
+            </button>
+            <button
+              class="menu-toggle"
+              aria-label={showSidebar ? "Toggle sidebar" : "Toggle menu"}
+              id="menuToggle"
+              data-sidebar-toggle={showSidebar ? "true" : "false"}
+            >
+              ☰
+            </button>
+            <nav id="mainNav">
+              <a href={base}>Home</a>
+              <a href={getCategoryLink("text")}>Text</a>
+              <a href={getCategoryLink("backgrounds")}>Backgrounds</a>
+              <a href={getCategoryLink("ui-components")}>UI Components</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {
+      showSidebar ? (
+        <div class="page-body with-sidebar">
+          <slot name="sidebar" />
+          <main>
+            <slot />
+          </main>
+        </div>
+      ) : (
+        <div class="page-body no-sidebar">
+          <main>
+            <slot />
+          </main>
+        </div>
+      )
+    }
+
+    <script>
+      function setupMobileMenu() {
+        const menuToggle = document.getElementById("menuToggle");
+        const mainNav = document.getElementById("mainNav");
+
+        if (!menuToggle || !mainNav) return;
+
+        menuToggle.addEventListener("click", () => {
+          const shouldToggleSidebar =
+            menuToggle.dataset.sidebarToggle === "true";
+
+          if (shouldToggleSidebar) {
+            document.getElementById("sidebar")?.classList.toggle("open");
+            document.getElementById("sidebarOverlay")?.classList.toggle("open");
+            return;
+          }
+
+          mainNav.classList.toggle("active");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (
+            !menuToggle.contains(e.target as Node) &&
+            !mainNav.contains(e.target as Node)
+          ) {
+            mainNav.classList.remove("active");
+          }
+        });
+      }
+
+      document.addEventListener("astro:page-load", setupMobileMenu);
+
+      function setupThemeToggle() {
+        const toggle = document.getElementById("themeToggle");
+        if (toggle) {
+          toggle.addEventListener("click", () => {
+            const current = document.documentElement.dataset.theme;
+            const next = current === "light" ? "dark" : "light";
+            document.documentElement.dataset.theme = next;
+            localStorage.setItem("theme", next);
+          });
+        }
+      }
+
+      document.addEventListener("astro:page-load", setupThemeToggle);
+
+      window
+        .matchMedia("(prefers-color-scheme: light)")
+        .addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            document.documentElement.dataset.theme = e.matches
+              ? "light"
+              : "dark";
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+---
+export const meta = {
+  title: "Neumorphic Light",
+  description: "Neumorphism (Light)",
+  category: "ui-components" as const,
+  tags: ["neumorphism", "card", "light"],
+};
+
+export const code = `<div style="background:#e0e5ec;border-radius:16px;padding:24px;box-shadow:8px 8px 16px #b8bec7,-8px -8px 16px #ffffff;max-width:320px;color:#333"><h3 style="margin:0 0 8px;font-size:1.2em">Neumorphic</h3><p style="margin:0;opacity:0.7;font-size:0.9em">Soft UI with inset/outset shadows on a light surface.</p></div>`;
+
+export const props = [
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#e0e5ec",
+    label: "Background",
+    description: "Card background color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 16,
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+  {
+    name: "padding",
+    type: "slider" as const,
+    default: 24,
+    min: 12,
+    max: 48,
+    step: 4,
+    unit: "px",
+    label: "Padding",
+    description: "Inner spacing",
+  },
+];
+
+export const codeTemplate = `<div style="background:{{bgColor}};border-radius:{{borderRadius}}px;padding:{{padding}}px;box-shadow:8px 8px 16px #b8bec7,-8px -8px 16px #ffffff;max-width:320px;color:#333"><h3 style="margin:0 0 8px;font-size:1.2em">Neumorphic</h3><p style="margin:0;opacity:0.7;font-size:0.9em">Soft UI with inset/outset shadows on a light surface.</p></div>`;
+---
+
+<Fragment set:html={code} />

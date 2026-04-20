@@ -1,0 +1,49 @@
+---
+export const meta = {
+  title: "Gradient Border Card",
+  description: "Gradient border card",
+  category: "ui-components" as const,
+  tags: ["gradient", "border", "card"],
+};
+
+export const code = `<div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;padding:2px;max-width:320px"><div style="background:#1a1a2e;border-radius:14px;padding:24px;color:#e0e0e0"><h3 style="margin:0 0 8px;font-size:1.2em">Gradient Border</h3><p style="margin:0;opacity:0.8;font-size:0.9em">A card with a gradient border using nested divs and background trick.</p></div></div>`;
+
+export const props = [
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#667eea",
+    label: "Color 1",
+    description: "Border gradient start color",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#764ba2",
+    label: "Color 2",
+    description: "Border gradient end color",
+  },
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#1a1a2e",
+    label: "Background",
+    description: "Card background color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 16,
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<div style="background:linear-gradient(135deg,{{color1}},{{color2}});border-radius:{{borderRadius}}px;padding:2px;max-width:320px"><div style="background:{{bgColor}};border-radius:calc({{borderRadius}}px - 2px);padding:24px;color:#e0e0e0"><h3 style="margin:0 0 8px;font-size:1.2em">Gradient Border</h3><p style="margin:0;opacity:0.8;font-size:0.9em">A card with a gradient border using nested divs and background trick.</p></div></div>`;
+---
+
+<Fragment set:html={code} />

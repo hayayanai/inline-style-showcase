@@ -1,0 +1,35 @@
+---
+export const meta = {
+  title: "Pricing Card",
+  description: "Pricing plan card with gradient border",
+  category: "ui-components" as const,
+  tags: ["pricing", "card", "plan", "gradient"],
+};
+
+export const code = `<div style="max-width:280px;padding:2px;border-radius:20px;background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899)"><div style="background:#0f172a;border-radius:18px;padding:28px;text-align:center"><div style="color:#a78bfa;font-size:0.8em;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">Pro Plan</div><div style="color:#fff;margin-bottom:16px"><span style="font-size:2.5em;font-weight:bold">$29</span><span style="color:#64748b;font-size:0.9em">/mo</span></div><div style="border-top:1px solid #1e293b;padding-top:16px;margin-bottom:20px;text-align:left"><div style="color:#cbd5e1;font-size:0.85em;padding:6px 0">&#10003; Unlimited projects</div><div style="color:#cbd5e1;font-size:0.85em;padding:6px 0">&#10003; Priority support</div><div style="color:#cbd5e1;font-size:0.85em;padding:6px 0">&#10003; Advanced analytics</div></div><div style="background:linear-gradient(90deg,#6366f1,#a855f7);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:0.9em;cursor:pointer;text-align:center">Get Started</div></div></div>`;
+
+export const props = [
+  {
+    name: "accentColor",
+    type: "color" as const,
+    default: "#6366f1",
+    label: "Accent Color",
+    description: "Primary accent color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 20,
+    min: 0,
+    max: 32,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<div style="max-width:280px;padding:2px;border-radius:{{borderRadius}}px;background:linear-gradient(135deg,{{accentColor}},#a855f7,#ec4899)"><div style="background:#0f172a;border-radius:18px;padding:28px;text-align:center"><div style="color:#a78bfa;font-size:0.8em;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">Pro Plan</div><div style="color:#fff;margin-bottom:16px"><span style="font-size:2.5em;font-weight:bold">$29</span><span style="color:#64748b;font-size:0.9em">/mo</span></div><div style="border-top:1px solid #1e293b;padding-top:16px;margin-bottom:20px;text-align:left"><div style="color:#cbd5e1;font-size:0.85em;padding:6px 0">&#10003; Unlimited projects</div><div style="color:#cbd5e1;font-size:0.85em;padding:6px 0">&#10003; Priority support</div><div style="color:#cbd5e1;font-size:0.85em;padding:6px 0">&#10003; Advanced analytics</div></div><div style="background:linear-gradient(90deg,{{accentColor}},#a855f7);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;font-size:0.9em;cursor:pointer;text-align:center">Get Started</div></div></div>`;
+---
+
+<Fragment set:html={code} />

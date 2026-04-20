@@ -1,0 +1,42 @@
+---
+export const meta = {
+  title: "Checkerboard",
+  description: "Checkerboard pattern",
+  category: "backgrounds" as const,
+  tags: ["pattern", "checkerboard"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background-color:#333;background-image:linear-gradient(45deg,#555 25%,transparent 25%),linear-gradient(-45deg,#555 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#555 75%),linear-gradient(-45deg,transparent 75%,#555 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0px"></div>`;
+
+export const props = [
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#333333",
+    label: "Background",
+    description: "Base background color",
+  },
+  {
+    name: "squareColor",
+    type: "color" as const,
+    default: "#555555",
+    label: "Square Color",
+    description: "Checker square color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 12,
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:{{borderRadius}}px;background-color:{{bgColor}};background-image:linear-gradient(45deg,{{squareColor}} 25%,transparent 25%),linear-gradient(-45deg,{{squareColor}} 25%,transparent 25%),linear-gradient(45deg,transparent 75%,{{squareColor}} 75%),linear-gradient(-45deg,transparent 75%,{{squareColor}} 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0px"></div>`;
+---
+
+<Fragment set:html={code} />

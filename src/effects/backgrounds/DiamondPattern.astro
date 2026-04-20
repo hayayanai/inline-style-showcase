@@ -1,0 +1,42 @@
+---
+export const meta = {
+  title: "Diamond Pattern",
+  description: "Argyle diamond repeating pattern",
+  category: "backgrounds" as const,
+  tags: ["diamond", "argyle", "pattern"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background-color:#1e293b;background-image:linear-gradient(45deg,#334155 25%,transparent 25%),linear-gradient(-45deg,#334155 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#334155 75%),linear-gradient(-45deg,transparent 75%,#334155 75%);background-size:40px 40px;background-position:0 0,0 20px,20px -20px,-20px 0"></div>`;
+
+export const props = [
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#1e293b",
+    label: "Base Color",
+    description: "Background base color",
+  },
+  {
+    name: "patternColor",
+    type: "color" as const,
+    default: "#334155",
+    label: "Diamond Color",
+    description: "Diamond pattern color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 12,
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:{{borderRadius}}px;background-color:{{bgColor}};background-image:linear-gradient(45deg,{{patternColor}} 25%,transparent 25%),linear-gradient(-45deg,{{patternColor}} 25%,transparent 25%),linear-gradient(45deg,transparent 75%,{{patternColor}} 75%),linear-gradient(-45deg,transparent 75%,{{patternColor}} 75%);background-size:40px 40px;background-position:0 0,0 20px,20px -20px,-20px 0"></div>`;
+---
+
+<Fragment set:html={code} />

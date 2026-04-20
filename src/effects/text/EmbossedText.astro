@@ -1,0 +1,47 @@
+---
+export const meta = {
+  title: "Embossed Text",
+  description: "Raised embossed text effect with inner shadow",
+  category: "text" as const,
+  tags: ["emboss", "3d", "shadow"],
+};
+
+export const code = `<span style="font-size:2.5em;font-weight:bold;color:#666;text-shadow:1px 1px 1px #fff,-1px -1px 1px #333;letter-spacing:0.05em">Embossed</span>`;
+
+export const props = [
+  {
+    name: "color",
+    type: "color" as const,
+    default: "#666",
+    label: "Text Color",
+    description: "Base text color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 2.5,
+    min: 1,
+    max: 5,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="font-size:{{fontSize}}{{fontSizeUnit}};font-weight:bold;color:{{color}};text-shadow:1px 1px 1px #fff,-1px -1px 1px #333;letter-spacing:0.05em">Embossed</span>`;
+---
+
+<Fragment set:html={code} />

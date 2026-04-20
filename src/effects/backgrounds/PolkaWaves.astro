@@ -1,0 +1,12 @@
+---
+export const meta = {
+  title: "Polka Waves",
+  description: "Playful layered radial pattern that feels like moving waves",
+  category: "backgrounds" as const,
+  tags: ["pattern", "radial", "playful"],
+};
+
+export const code = `<div style="padding:2.5rem;border-radius:16px;background-color:#0f172a;background-image:radial-gradient(circle at 20% 20%,rgba(56,189,248,.45) 0 14%,transparent 15%),radial-gradient(circle at 80% 20%,rgba(168,85,247,.4) 0 13%,transparent 14%),radial-gradient(circle at 20% 80%,rgba(250,204,21,.38) 0 12%,transparent 13%),radial-gradient(circle at 80% 80%,rgba(45,212,191,.36) 0 11%,transparent 12%),linear-gradient(135deg,#0f172a,#1e1b4b);background-size:120px 120px,140px 140px,130px 130px,150px 150px,cover;color:#e2e8f0;font-weight:600;text-align:center">Polka Waves</div>`;
+---
+
+<Fragment set:html={code} />

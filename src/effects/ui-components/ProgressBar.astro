@@ -1,0 +1,31 @@
+---
+export const meta = {
+  title: "Progress Bar",
+  description: "Gradient progress bar with percentage",
+  category: "ui-components" as const,
+  tags: ["progress", "bar", "gradient"],
+};
+
+export const code = `<div style="max-width:320px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:#fff;font-size:0.85em;font-weight:500">Progress</span><span style="color:#94a3b8;font-size:0.85em">72%</span></div><div style="width:100%;height:10px;background:#1e293b;border-radius:9999px;overflow:hidden"><div style="width:72%;height:100%;background:linear-gradient(90deg,#6366f1,#a855f7);border-radius:9999px"></div></div></div>`;
+
+export const props = [
+  {
+    name: "startColor",
+    type: "color" as const,
+    default: "#6366f1",
+    label: "Start Color",
+    description: "Gradient start color",
+  },
+  {
+    name: "endColor",
+    type: "color" as const,
+    default: "#a855f7",
+    label: "End Color",
+    description: "Gradient end color",
+  },
+];
+
+export const codeTemplate = `<div style="max-width:320px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:#fff;font-size:0.85em;font-weight:500">Progress</span><span style="color:#94a3b8;font-size:0.85em">72%</span></div><div style="width:100%;height:10px;background:#1e293b;border-radius:9999px;overflow:hidden"><div style="width:72%;height:100%;background:linear-gradient(90deg,{{startColor}},{{endColor}});border-radius:9999px"></div></div></div>`;
+---
+
+<Fragment set:html={code} />

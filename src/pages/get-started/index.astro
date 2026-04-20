@@ -1,0 +1,138 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { getAllEffects, getCategoryLabel } from "../../lib/effects";
+
+const allEffects = getAllEffects();
+const base = import.meta.env.BASE_URL;
+
+// Flatten all effects into a single list
+const allEffectsList = [...allEffects.entries()].flatMap(
+  ([_, effects]) => effects,
+);
+allEffectsList.sort((a, b) => a.meta.title.localeCompare(b.meta.title));
+---
+
+<MainLayout title="Index" showSidebar>
+  <Sidebar currentCategory="get-started" currentSlug="index" slot="sidebar" />
+  <div class="index-page">
+    <h1 class="index-title">Index</h1>
+    <p class="index-description">
+      All {allEffectsList.length} effects at a glance. Click any to view details.
+    </p>
+
+    <div class="index-grid">
+      {
+        allEffectsList.map((effect) => (
+          <a
+            href={`${base}${effect.category}/${effect.slug}`}
+            class="index-card"
+          >
+            <div class="index-card-preview">
+              <effect.Component />
+            </div>
+            <div class="index-card-info">
+              <span class="index-card-category">
+                {getCategoryLabel(effect.category)}
+              </span>
+              <h2 class="index-card-title">{effect.meta.title}</h2>
+              <p class="index-card-desc">{effect.meta.description}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .index-page {
+    padding: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .index-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+  }
+
+  .index-description {
+    color: var(--text-secondary);
+    margin: 0 0 2rem;
+    line-height: 1.6;
+  }
+
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .index-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+    border: 1px solid var(--overlay-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .index-card:hover {
+    border-color: var(--accent-border);
+    box-shadow: 0 0 20px var(--accent-overlay);
+  }
+
+  .index-card-preview {
+    min-height: 100px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--preview-bg);
+  }
+
+  .index-card-info {
+    padding: 1rem 1.25rem;
+  }
+
+  .index-card-category {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+
+  .index-card-title {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .index-card-desc {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .index-page {
+      padding: 1.5rem 1rem;
+    }
+
+    .index-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

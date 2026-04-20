@@ -1,0 +1,42 @@
+---
+export const meta = {
+  title: "Vertical Stripes",
+  description: "Vertical stripe pattern",
+  category: "backgrounds" as const,
+  tags: ["stripes", "pattern"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background:repeating-linear-gradient(90deg,#ee7752,#ee7752 10px,#e73c7e 10px,#e73c7e 20px)"></div>`;
+
+export const props = [
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#ee7752",
+    label: "Color 1",
+    description: "Stripe color 1",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#e73c7e",
+    label: "Color 2",
+    description: "Stripe color 2",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 12,
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:{{borderRadius}}px;background:repeating-linear-gradient(90deg,{{color1}},{{color1}} 10px,{{color2}} 10px,{{color2}} 20px)"></div>`;
+---
+
+<Fragment set:html={code} />

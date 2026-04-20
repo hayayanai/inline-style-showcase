@@ -1,0 +1,26 @@
+---
+import { getAllEffects } from "../../lib/effects";
+
+export function getStaticPaths() {
+  const allEffects = getAllEffects();
+  const paths: { params: { category: string }; props: { redirect: string } }[] =
+    [];
+
+  for (const [category, effects] of allEffects) {
+    const first = effects[0];
+    if (first) {
+      paths.push({
+        params: { category },
+        props: {
+          redirect: `${import.meta.env.BASE_URL}${category}/${first.slug}`,
+        },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { redirect } = Astro.props;
+return Astro.redirect(redirect);
+---

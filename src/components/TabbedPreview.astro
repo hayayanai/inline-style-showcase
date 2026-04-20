@@ -1,0 +1,115 @@
+---
+import CodeBlock from "./CodeBlock.astro";
+import CopyButton from "./CopyButton.astro";
+
+interface Props {
+  code: string;
+}
+
+const { code } = Astro.props;
+---
+
+<div class="tabbed-preview">
+  <div class="tab-bar">
+    <button class="tab active" data-tab="preview">Preview</button>
+    <button class="tab" data-tab="code">Code</button>
+  </div>
+
+  <div class="tab-panel active" data-panel="preview">
+    <div class="preview-area" id="customize-preview-area">
+      <slot />
+    </div>
+  </div>
+
+  <div class="tab-panel" data-panel="code">
+    <div class="code-container" id="customize-code-container">
+      <CopyButton text={code} />
+      <CodeBlock code={code} lang="html" />
+    </div>
+  </div>
+</div>
+
+<style>
+  .tabbed-preview {
+    background: var(--bg-secondary);
+    border: 1px solid var(--overlay-light);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--overlay-light);
+    background: var(--preview-bg);
+  }
+
+  .tab {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .tab:hover {
+    color: var(--text-primary);
+  }
+
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  .preview-area {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .code-container {
+    position: relative;
+    padding: 0.5rem;
+  }
+</style>
+
+<script>
+  function setupTabbedPreviews() {
+    document.querySelectorAll(".tabbed-preview").forEach((container) => {
+      const tabs = container.querySelectorAll(".tab");
+      const panels = container.querySelectorAll(".tab-panel");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = tab.getAttribute("data-tab");
+
+          tabs.forEach((t) => t.classList.remove("active"));
+          panels.forEach((p) => p.classList.remove("active"));
+
+          tab.classList.add("active");
+          container
+            .querySelector(`[data-panel="${target}"]`)
+            ?.classList.add("active");
+        });
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupTabbedPreviews);
+</script>

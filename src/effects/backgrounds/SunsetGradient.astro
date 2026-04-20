@@ -1,0 +1,45 @@
+---
+export const meta = {
+  title: "Sunset Gradient",
+  description: "Sunset gradient background",
+  category: "backgrounds" as const,
+  tags: ["gradient", "warm"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background:linear-gradient(180deg,#0c0c3a 0%,#4a1942 30%,#c94b4b 60%,#f09819 100%)"></div>`;
+
+export const props = [
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#0c0c3a",
+    label: "Color 1 (Top)",
+    description: "Gradient top color",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#4a1942",
+    label: "Color 2",
+    description: "Gradient upper-middle color",
+  },
+  {
+    name: "color3",
+    type: "color" as const,
+    default: "#c94b4b",
+    label: "Color 3",
+    description: "Gradient lower-middle color",
+  },
+  {
+    name: "color4",
+    type: "color" as const,
+    default: "#f09819",
+    label: "Color 4 (Bottom)",
+    description: "Gradient bottom color",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:12px;background:linear-gradient(180deg,{{color1}} 0%,{{color2}} 30%,{{color3}} 60%,{{color4}} 100%)"></div>`;
+---
+
+<Fragment set:html={code} />

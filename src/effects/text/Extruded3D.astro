@@ -1,0 +1,54 @@
+---
+export const meta = {
+  title: "Extruded 3D",
+  description: "3D extruded text effect",
+  category: "text" as const,
+  tags: ["3d", "shadow", "extrude"],
+};
+
+export const code = `<span style="color:#fff;text-shadow:1px 1px 0 #555,2px 2px 0 #555,3px 3px 0 #555,4px 4px 0 #555,5px 5px 0 #555,6px 6px 0 #555;font-size:2.5em;font-weight:bold">3D Extrude</span>`;
+
+export const props = [
+  {
+    name: "textColor",
+    type: "color" as const,
+    default: "#ffffff",
+    label: "Text Color",
+    description: "Text color",
+  },
+  {
+    name: "shadowColor",
+    type: "color" as const,
+    default: "#555555",
+    label: "Shadow Color",
+    description: "Extrusion shadow color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 2.5,
+    min: 1,
+    max: 5,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+  {
+    name: "fontSizeUnit",
+    type: "select" as const,
+    default: "em",
+    label: "Font Size Unit",
+    description: "Font size unit",
+    options: [
+      { value: "em", label: "em" },
+      { value: "px", label: "px" },
+      { value: "rem", label: "rem" },
+    ],
+  },
+];
+
+export const codeTemplate = `<span style="color:{{textColor}};text-shadow:1px 1px 0 {{shadowColor}},2px 2px 0 {{shadowColor}},3px 3px 0 {{shadowColor}},4px 4px 0 {{shadowColor}},5px 5px 0 {{shadowColor}},6px 6px 0 {{shadowColor}};font-size:{{fontSize}}{{fontSizeUnit}};font-weight:bold">3D Extrude</span>`;
+---
+
+<Fragment set:html={code} />

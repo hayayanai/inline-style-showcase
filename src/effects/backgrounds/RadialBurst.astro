@@ -1,0 +1,42 @@
+---
+export const meta = {
+  title: "Radial Burst",
+  description: "Sunburst radial stripe pattern",
+  category: "backgrounds" as const,
+  tags: ["radial", "burst", "sunburst"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background:repeating-conic-gradient(#1e293b 0deg 10deg,#0f172a 10deg 20deg) center/cover"></div>`;
+
+export const props = [
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#1e293b",
+    label: "Color 1",
+    description: "First stripe color",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#0f172a",
+    label: "Color 2",
+    description: "Second stripe color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 12,
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:{{borderRadius}}px;background:repeating-conic-gradient({{color1}} 0deg 10deg,{{color2}} 10deg 20deg) center/cover"></div>`;
+---
+
+<Fragment set:html={code} />

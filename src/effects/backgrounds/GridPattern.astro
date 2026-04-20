@@ -1,0 +1,46 @@
+---
+export const meta = {
+  title: "Grid Pattern",
+  description: "Grid pattern background",
+  category: "backgrounds" as const,
+  tags: ["pattern", "grid"],
+};
+
+export const code = `<div style="width:100%;min-height:200px;border-radius:12px;background-color:#0a0a0a;background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:20px 20px"></div>`;
+
+export const props = [
+  {
+    name: "bgColor",
+    type: "color" as const,
+    default: "#0a0a0a",
+    label: "Background",
+    description: "Base background color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 12,
+    min: 0,
+    max: 24,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+  {
+    name: "gridSize",
+    type: "slider" as const,
+    default: 20,
+    min: 10,
+    max: 50,
+    step: 5,
+    unit: "px",
+    label: "Grid Size",
+    description: "Grid spacing",
+  },
+];
+
+export const codeTemplate = `<div style="width:100%;min-height:200px;border-radius:{{borderRadius}}px;background-color:{{bgColor}};background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:{{gridSize}}px {{gridSize}}px"></div>`;
+---
+
+<Fragment set:html={code} />

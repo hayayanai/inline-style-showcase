@@ -1,0 +1,103 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+<button class="copy-button" data-copy-text={text}>
+  <svg
+    class="icon"
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </svg>
+  <span class="label">Copy</span>
+  <span class="feedback">Copied!</span>
+</button>
+
+<style>
+  .copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--overlay-light);
+    border: 1px solid var(--overlay-strong);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .copy-button:hover {
+    background: var(--overlay-medium);
+    border-color: var(--overlay-strong);
+  }
+
+  .copy-button:active {
+    transform: scale(0.95);
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .feedback {
+    display: none;
+  }
+
+  .copy-button.copied .label {
+    display: none;
+  }
+
+  .copy-button.copied .feedback {
+    display: inline;
+  }
+
+  .copy-button.copied .icon {
+    display: none;
+  }
+</style>
+
+<script>
+  function setupCopyButtons() {
+    document.querySelectorAll(".copy-button").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const text = button.getAttribute("data-copy-text");
+        if (!text) return;
+
+        try {
+          await navigator.clipboard.writeText(text);
+          button.classList.add("copied");
+
+          setTimeout(() => {
+            button.classList.remove("copied");
+          }, 2000);
+        } catch (err) {
+          console.error("Failed to copy text:", err);
+        }
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupCopyButtons);
+</script>

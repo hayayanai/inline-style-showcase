@@ -1,0 +1,42 @@
+---
+export const meta = {
+  title: "Gradient Badge",
+  description: "Gradient badge",
+  category: "ui-components" as const,
+  tags: ["badge", "gradient", "pill"],
+};
+
+export const code = `<span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:6px 16px;border-radius:9999px;font-size:0.85em;font-weight:600;letter-spacing:0.02em">New Feature</span>`;
+
+export const props = [
+  {
+    name: "color1",
+    type: "color" as const,
+    default: "#667eea",
+    label: "Color 1",
+    description: "Gradient start color",
+  },
+  {
+    name: "color2",
+    type: "color" as const,
+    default: "#764ba2",
+    label: "Color 2",
+    description: "Gradient end color",
+  },
+  {
+    name: "borderRadius",
+    type: "slider" as const,
+    default: 9999,
+    min: 4,
+    max: 9999,
+    step: 1,
+    unit: "px",
+    label: "Border Radius",
+    description: "Corner roundness",
+  },
+];
+
+export const codeTemplate = `<span style="display:inline-block;background:linear-gradient(135deg,{{color1}},{{color2}});color:#fff;padding:6px 16px;border-radius:{{borderRadius}}px;font-size:0.85em;font-weight:600;letter-spacing:0.02em">New Feature</span>`;
+---
+
+<Fragment set:html={code} />

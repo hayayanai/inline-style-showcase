@@ -1,0 +1,36 @@
+---
+export const meta = {
+  title: "Gradient Stroke",
+  description:
+    "Bold headline with transparent fill and colorful stroke-like glow",
+  category: "text" as const,
+  tags: ["gradient", "stroke", "headline"],
+};
+
+export const code = `<span style="font-size:3em;font-weight:900;letter-spacing:0.04em;color:transparent;-webkit-text-stroke:1px #f8fafc;text-shadow:0 0 1px #f8fafc,0 0 12px #22d3ee,0 0 24px #a855f7">INLINE CSS</span>`;
+
+export const props = [
+  {
+    name: "glowColor",
+    type: "color" as const,
+    default: "#22d3ee",
+    label: "Glow Color",
+    description: "Main glow color",
+  },
+  {
+    name: "fontSize",
+    type: "slider" as const,
+    default: 3,
+    min: 1,
+    max: 6,
+    step: 0.5,
+    unit: "em",
+    label: "Font Size",
+    description: "Text size",
+  },
+];
+
+export const codeTemplate = `<span style="font-size:{{fontSize}}em;font-weight:900;letter-spacing:0.04em;color:transparent;-webkit-text-stroke:1px #f8fafc;text-shadow:0 0 1px #f8fafc,0 0 12px {{glowColor}},0 0 24px #a855f7">INLINE CSS</span>`;
+---
+
+<Fragment set:html={code} />
